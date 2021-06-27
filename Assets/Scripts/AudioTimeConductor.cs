@@ -8,8 +8,8 @@ public class AudioTimeConductor : MonoBehaviour
 {
     [NonSerialized] public static AudioTimeConductor Main;
     
-    public float beatsPerMinute;
-    public float firstBeatOffset;
+    [SerializeField] private float beatsPerMinute;
+    [SerializeField] private float firstBeatOffset;
     [SerializeField] private bool playOnAwake;
     [SerializeField] private UnityEvent beat;
     
@@ -40,6 +40,9 @@ public class AudioTimeConductor : MonoBehaviour
         }
     }
     public float SongDeltaTime => SongPositionInSeconds - _oldSongPosition;
+    public float GlobalSongPosition => SongPositionInSeconds + _startSongTime + firstBeatOffset;
+    public int NearestBeat => Mathf.RoundToInt(SongPositionInBeats);
+    public float NearestBeatDistance => NearestBeat * SecPerBeat - SongPositionInSeconds;
     public float SecPerBeat { get; private set; }
 
     
@@ -49,9 +52,10 @@ public class AudioTimeConductor : MonoBehaviour
     private float _dspSongTime;
     private float _oldSongPosition;
     private float _currentAfterBeatTime;
+    private float _startSongTime;
     
 
-    private void Start()
+    private void Awake()
     {
         Main = this;
         
@@ -73,12 +77,13 @@ public class AudioTimeConductor : MonoBehaviour
         _musicSource.Play(0);
 
         _currentAfterBeatTime = 0;
+
+        _startSongTime = Time.time;
     }
 
     private void Update()
     {
-        
-        if (SongPositionInSeconds < _musicSource.clip.length)
+        if (_isPlaying && SongPositionInSeconds < _musicSource.clip.length)
         {
             _currentAfterBeatTime += Time.deltaTime;
             if (!(_currentAfterBeatTime > SecPerBeat)) return;
@@ -96,5 +101,4 @@ public class AudioTimeConductor : MonoBehaviour
     {
         _oldSongPosition = SongPositionInSeconds;
     }
-
 }

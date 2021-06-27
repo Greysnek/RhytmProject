@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TestMovement : MonoBehaviour
 {
@@ -11,24 +10,24 @@ public class TestMovement : MonoBehaviour
 
     private float _oldBeatTime;
 
+    private bool _switchingIsAllow;
+    public void AllowSwitch()
+    {
+        if (AudioTimeConductor.Main.NearestBeatDistance < 0)
+        {
+            SwitchScale();
+            return;
+        }
+        
+        _switchingIsAllow = true;
+    }
     public void SwitchScale()
     {
         _isOddBeat = !_isOddBeat;
-
-        var error = Mathf.Abs(Time.time - _oldBeatTime - AudioTimeConductor.Main.SecPerBeat);
-        _oldBeatTime = Time.time;
-        
-        if (error > 0.0085)
-        {
-            Debug.LogWarning("accuracy: +-" + error);
-        }
-        else
-        {
-            Debug.Log("accuracy: +-" + error);
-        }   
+        _switchingIsAllow = false;
     }
     public void Update()
     {
-        transform.localScale += Scale * speed * AudioTimeConductor.Main.SongDeltaTime / AudioTimeConductor.Main.SecPerBeat;
+        transform.localScale += Scale * (speed * AudioTimeConductor.Main.SongDeltaTime) / AudioTimeConductor.Main.SecPerBeat;
     }
 }
