@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +12,8 @@ public class AudioTimeConductor : MonoBehaviour
     [SerializeField] private float beatsPerMinute;
     [SerializeField] private float firstBeatOffset;
     [SerializeField] private bool playOnAwake;
-    [SerializeField] private UnityEvent beat;
+    [SerializeField] private UnityEvent onPlay;
+    [SerializeField] private UnityEvent onBeat;
     
     public float SongPositionInSeconds
     {
@@ -39,11 +41,42 @@ public class AudioTimeConductor : MonoBehaviour
             return 0;
         }
     }
+    public float RelativeSongPosition => SongPositionInSeconds / _musicSource.clip.length;
     public float SongDeltaTime => SongPositionInSeconds - _oldSongPosition;
     public float GlobalSongPosition => SongPositionInSeconds + _startSongTime + firstBeatOffset;
     public int NearestBeat => Mathf.RoundToInt(SongPositionInBeats);
     public float NearestBeatDistance => NearestBeat * SecPerBeat - SongPositionInSeconds;
     public float SecPerBeat { get; private set; }
+    public float[] BeatTimes
+    {
+        get
+        {
+            var currentBeat = 0;
+            var result = new List<float>();
+
+            while (currentBeat * SecPerBeat < _musicSource.clip.length)
+            {
+                result.Add(currentBeat * SecPerBeat);
+                currentBeat++;
+            }
+
+            return result.ToArray();
+        }
+    }
+
+    public float[] RelativeBeatTimes
+    {
+        get
+        {
+            var result = new List<float>();
+            foreach (var beatTime in BeatTimes)
+            {
+                result.Add(beatTime / _musicSource.clip.length);
+            }
+
+            return result.ToArray();
+        }
+    }
 
     
     private AudioSource _musicSource;
@@ -79,6 +112,8 @@ public class AudioTimeConductor : MonoBehaviour
         _currentAfterBeatTime = 0;
 
         _startSongTime = Time.time;
+        
+        onPlay?.Invoke();
     }
 
     private void Update()
@@ -89,7 +124,7 @@ public class AudioTimeConductor : MonoBehaviour
             if (!(_currentAfterBeatTime > SecPerBeat)) return;
             _currentAfterBeatTime = 0;
             
-            beat?.Invoke();
+            onBeat?.Invoke();
 
             return;
         }
