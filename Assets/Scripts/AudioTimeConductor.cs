@@ -46,7 +46,7 @@ public class AudioTimeConductor : MonoBehaviour
     public float GlobalSongPosition => SongPositionInSeconds + _startSongTime + firstBeatOffset;
     public int NearestBeat => Mathf.RoundToInt(SongPositionInBeats);
     public float NearestBeatDistance => NearestBeat * SecPerBeat - SongPositionInSeconds;
-    public float SecPerBeat { get; private set; }
+    public float SecPerBeat => 60f / beatsPerMinute;
     public float[] BeatTimes
     {
         get
@@ -71,7 +71,7 @@ public class AudioTimeConductor : MonoBehaviour
             var result = new List<float>();
             foreach (var beatTime in BeatTimes)
             {
-                result.Add(beatTime / _musicSource.clip.length);
+                result.Add((beatTime + firstBeatOffset) / _musicSource.clip.length);
             }
 
             return result.ToArray();
@@ -103,7 +103,6 @@ public class AudioTimeConductor : MonoBehaviour
 
     public void Play()
     {
-        SecPerBeat = 60f / beatsPerMinute;
         _dspSongTime = (float) AudioSettings.dspTime;
         
         _isPlaying = true;

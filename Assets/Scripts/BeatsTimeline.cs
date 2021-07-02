@@ -1,25 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
+[RequireComponent(typeof(PlotRender))]
 public class BeatsTimeline : MonoBehaviour
 {
-    [SerializeField] private float startX;
-    [SerializeField] private float finishX;
     [SerializeField] private Transform arrow;
     [SerializeField] private GameObject beat;
 
     private Vector3 _arrowPosition;
+    private List<GameObject> _beats = new List<GameObject>();
 
-    private float Length
-    {
-        get
-        {
-            var length = finishX - startX;
-            if (!(length < 0)) return length;
-            
-            Debug.LogError("Wrong start & finish coordinates");
-            return 0;
-        }
-    }
+    private float Length => GetComponent<PlotRender>().length;
 
     private void Start()
     {
@@ -28,18 +19,26 @@ public class BeatsTimeline : MonoBehaviour
 
     private void Update()
     {
-        _arrowPosition.x = startX + Length * AudioTimeConductor.Main.RelativeSongPosition;
+        _arrowPosition.x = Length * AudioTimeConductor.Main.RelativeSongPosition;
         arrow.position = _arrowPosition;
     }
 
     public void SetBeats()
     {
+        foreach (var beat in _beats)
+        {
+            Destroy(beat);
+        }
+        _beats?.Clear();
+        
         foreach (var relativeBeatTime in AudioTimeConductor.Main.RelativeBeatTimes)
         {
             var newBeat = Instantiate(beat, transform, true);
             var beatPosition = newBeat.transform.position;
-            beatPosition.x = startX + Length * relativeBeatTime;
+            beatPosition.x = Length * relativeBeatTime;
             newBeat.transform.position = beatPosition;
+            
+            _beats.Add(newBeat);
         }
     }
 }
