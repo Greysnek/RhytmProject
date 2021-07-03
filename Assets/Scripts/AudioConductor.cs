@@ -16,7 +16,7 @@ public class AudioConductor : MonoBehaviour
     [SerializeField] private UnityEvent onBeat;
     
     private AudioSource _source;
-    private IEnumerator _playing;
+    private Coroutine _playing;
     private float _startSongTime;
 
     private float SongPositionInSeconds => _source.time;
@@ -56,8 +56,6 @@ public class AudioConductor : MonoBehaviour
     private void Awake()
     {
         Main = this;
-
-        _playing = Playing();
         
         _source = GetComponent<AudioSource>();
         _source.playOnAwake = false;
@@ -70,8 +68,11 @@ public class AudioConductor : MonoBehaviour
 
     public void Play()
     {
-        StopCoroutine(_playing);
-        StartCoroutine(_playing);
+        if (_playing != null)
+        {
+            StopCoroutine(_playing);
+        }
+        _playing = StartCoroutine(Playing());
     }
 
     private IEnumerator Playing()
