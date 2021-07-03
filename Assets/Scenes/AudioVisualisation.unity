@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 1299994008}
   - component: {fileID: 1299994009}
   m_Layer: 0
-  m_Name: Visualisator
+  m_Name: SoundManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -589,7 +589,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   arrow: {fileID: 4680668905189234781}
-  beat: {fileID: 1380484530461852598, guid: 8855827526772e040811e3afb9813dc7, type: 3}
+  beatPrefab: {fileID: 1380484530461852598, guid: 8855827526772e040811e3afb9813dc7,
+    type: 3}
 --- !u!114 &1299994009
 MonoBehaviour:
   m_ObjectHideFlags: 0

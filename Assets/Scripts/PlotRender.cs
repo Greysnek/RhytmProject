@@ -27,7 +27,7 @@ public class PlotRender : MonoBehaviour
             columnPosition.x += deltaX;
         }
 
-        length = _columns[_columns.Count - 1].position.x - _columns[0].position.x;
+        length = _columns[0].localScale.x * _columns.Count;
     }
 
     public void UpdateValues(float[] values)
@@ -69,23 +69,13 @@ public class PlotRender : MonoBehaviour
             _columns.RemoveRange(values.Length, _columns.Count - 1);
         }
         
-        length = _columns[_columns.Count - 1].position.x - _columns[0].position.x;
+        length = _columns[_columns.Count - 1].position.x + _columns[0].localScale.x / 2;
     }
 
     private void SetHeight(Transform columnTransform, float height)
     {
         var columnScale = columnTransform.localScale;
-        columnScale.y = height * defaultHeight;
+        columnScale.y = height * defaultHeight + columnScale.x;
         columnTransform.localScale = columnScale;
-    }
-
-    public void PaintPosition(float position, Color color)
-    {
-        // if (position <= 0 || position > 1) return;
-        //
-        // for (var i = 0; i < position * _columns.Count; i++)
-        // {
-        //     _columns[i].GetComponent<Renderer>().material.color = color;
-        // }
     }
 }

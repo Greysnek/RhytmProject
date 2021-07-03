@@ -6,8 +6,8 @@
         Clip.GetData(data, 0);
     }
 
-    // private void Start()
-    // {
-    //     ShowData();
-    // }
+    private void Start()
+    {
+        ShowData();
+    }
 }

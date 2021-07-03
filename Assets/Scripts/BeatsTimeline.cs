@@ -5,7 +5,7 @@ using UnityEngine;
 public class BeatsTimeline : MonoBehaviour
 {
     [SerializeField] private Transform arrow;
-    [SerializeField] private GameObject beat;
+    [SerializeField] private GameObject beatPrefab;
 
     private Vector3 _arrowPosition;
     private List<GameObject> _beats = new List<GameObject>();
@@ -19,7 +19,7 @@ public class BeatsTimeline : MonoBehaviour
 
     private void Update()
     {
-        _arrowPosition.x = Length * AudioTimeConductor.Main.RelativeSongPosition;
+        _arrowPosition.x = Length * AudioConductor.Main.RelativeSongPosition;
         arrow.position = _arrowPosition;
     }
 
@@ -31,9 +31,9 @@ public class BeatsTimeline : MonoBehaviour
         }
         _beats?.Clear();
         
-        foreach (var relativeBeatTime in AudioTimeConductor.Main.RelativeBeatTimes)
+        foreach (var relativeBeatTime in AudioConductor.Main.RelativeBeatsTimes)
         {
-            var newBeat = Instantiate(beat, transform, true);
+            var newBeat = Instantiate(beatPrefab, transform, true);
             var beatPosition = newBeat.transform.position;
             beatPosition.x = Length * relativeBeatTime;
             newBeat.transform.position = beatPosition;

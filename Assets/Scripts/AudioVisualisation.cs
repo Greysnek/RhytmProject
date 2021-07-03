@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(AudioSource), typeof(PlotRender))]
 public abstract class AudioVisualisation : MonoBehaviour
@@ -33,11 +32,6 @@ public abstract class AudioVisualisation : MonoBehaviour
     }
 
     protected abstract void GetData(ref float[] data);
-
-    private void Update()
-    {
-        _plotRender.PaintPosition(Source.time / Clip.length, Color.white);
-    }
 
     private float[] Compress(float[] data)
     {
