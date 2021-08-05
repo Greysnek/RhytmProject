@@ -23,6 +23,7 @@ public class AudioConductor : MonoBehaviour
     public float SongPositionInBeats => (SongPositionInSeconds - firstBeatOffset) / SecPerBeat;
     public float RelativeSongPosition => SongPositionInSeconds / _source.clip.length;
     private float SecPerBeat => 60f / beatsPerMinute;
+    
     public float[] BeatsTimes
     {
         get
@@ -80,19 +81,14 @@ public class AudioConductor : MonoBehaviour
         _source.Play();
         onPlay?.Invoke();
         
-        float currentAfterBeatTime = 0;
-        
-        while (SongPositionInSeconds < _source.clip.length)
+        foreach (var beatTime in BeatsTimes)
         {
-            currentAfterBeatTime += Time.deltaTime;
-            
-            if (currentAfterBeatTime >= SecPerBeat)
+            while (_source.time < beatTime)
             {
-                onBeat?.Invoke();
-                currentAfterBeatTime = 0;
+                yield return null;
             }
             
-            yield return null;
+            onBeat?.Invoke();
         }
     }
 }

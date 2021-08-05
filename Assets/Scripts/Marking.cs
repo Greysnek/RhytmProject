@@ -7,6 +7,11 @@ public class Marking : MonoBehaviour
     {
         if (!Input.GetKeyDown(KeyCode.M)) return;
         
+        SetMark();
+    }
+
+    public void SetMark()
+    {
         var newMark = Instantiate(mark).transform;
         newMark.position = transform.position;
     }

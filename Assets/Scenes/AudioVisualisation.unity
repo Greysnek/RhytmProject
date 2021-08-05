@@ -633,7 +633,30 @@ MonoBehaviour:
         m_CallState: 2
   onBeat:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1496083707}
+        m_MethodName: SetMark
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1496083707 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8493532834720938344, guid: 22e32021bbcc6e04aa4049845e7e349f,
+    type: 3}
+  m_PrefabInstance: {fileID: 8588282808984934298}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57e7e017c1010749977f6916b073777, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1539703786
 GameObject:
   m_ObjectHideFlags: 0
